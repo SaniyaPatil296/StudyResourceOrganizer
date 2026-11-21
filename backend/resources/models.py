@@ -1,8 +1,14 @@
 
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
+    owner = models.ForeignKey(
+    User,
+    on_delete=models.CASCADE,
+    related_name="study_categories"
+)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
 
@@ -11,6 +17,11 @@ class Category(models.Model):
 
 
 class StudyResource(models.Model):
+    owner = models.ForeignKey(
+    User,
+    on_delete=models.CASCADE,
+    related_name="study_resources"
+)
     title = models.CharField(max_length=200)
     url = models.URLField()
     description = models.TextField(blank=True)
