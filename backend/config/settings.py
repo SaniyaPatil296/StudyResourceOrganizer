@@ -38,7 +38,15 @@ ALLOWED_HOSTS = os.environ.get(
 
 # Application definition
 
+
 INSTALLED_APPS = [
+    # Daphne ASGI server
+    'daphne',
+
+    # Django Channels
+    'channels',
+
+    # Django built-in applications
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,12 +54,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Existing applications
     'rest_framework',
     'corsheaders',
     'resources',
     'accounts',
     'rest_framework.authtoken',
 ]
+
 
 
 MIDDLEWARE = [
@@ -84,7 +94,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+# ASGI application for HTTP and WebSocket support
+ASGI_APPLICATION = 'config.asgi.application'
 
+# WebSocket Channel Layer
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases

@@ -22,6 +22,9 @@ function App() {
   const [categories, setCategories] = useState([]);
   const [resources, setResources] = useState([]);
   const [notes, setNotes] = useState([]);
+  // Real-time notification state
+  const [notifications, setNotifications] = useState([]);
+  const [wsStatus, setWsStatus] = useState("disconnected");
 
   // General state
   const [loading, setLoading] = useState(true);
@@ -206,6 +209,54 @@ function App() {
     } else {
       setLoading(false);
     }
+  }, [accessToken]);
+  // Real-time WebSocket notifications
+  useEffect(() => {
+    if (!accessToken) {
+      setWsStatus("disconnected");
+      return;
+    }
+
+    const websocketBase = API.replace(/^http/, "ws").replace(/\/api\/?$/, "");
+
+    const socket = new WebSocket(
+      `${websocketBase}/ws/notifications/?token=${encodeURIComponent(accessToken)}`,
+    );
+
+    setWsStatus("connecting");
+
+    socket.onopen = () => {
+      console.log("Notification WebSocket connected.");
+      setWsStatus("connected");
+    };
+
+    socket.onmessage = (event) => {
+      try {
+        const payload = JSON.parse(event.data);
+
+        if (payload.type === "notification") {
+          setNotifications((previous) =>
+            [payload.data, ...previous].slice(0, 30),
+          );
+        }
+      } catch (error) {
+        console.error("Notification message error:", error);
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+      setWsStatus("disconnected");
+    };
+
+    socket.onclose = () => {
+      setWsStatus("disconnected");
+      console.log("Notification WebSocket disconnected.");
+    };
+
+    return () => {
+      socket.close();
+    };
   }, [accessToken]);
 
   // ==========================================
@@ -614,6 +665,69 @@ function App() {
           <h2>Welcome to your Study Dashboard!</h2>
           <p>Manage your subjects and learning resources in one place.</p>
         </section>
+        {/* Real-Time Notifications */}
+<section className="notification-panel">
+  <div className="notification-heading">
+    <div>
+      <h2>🔔 Live Notifications</h2>
+      <p>Stay updated with your latest study activities.</p>
+    </div>
+
+    <span className={`connection-status ${wsStatus}`}>
+      {wsStatus === "connected"
+        ? "● Connected"
+        : wsStatus === "connecting"
+          ? "● Connecting..."
+          : "● Disconnected"}
+    </span>
+  </div>
+
+  {notifications.length === 0 ? (
+    <p className="notification-empty">
+      No new notifications. Create a category, resource, or note to see
+      real-time updates here.
+    </p>
+  ) : (
+    <>
+      <div className="notification-actions">
+        <span>{notifications.length} notification(s)</span>
+
+        <button
+          type="button"
+          onClick={() => setNotifications([])}
+        >
+          Clear All
+        </button>
+      </div>
+
+      <div className="notification-list">
+        {notifications.map((notification, index) => (
+          <div
+            className="notification-item"
+            key={`${notification.timestamp}-${index}`}
+          >
+            <div className="notification-icon">🔔</div>
+
+            <div className="notification-details">
+              <strong>
+                {notification.event
+                  ?.replace("_created", "")
+                  .replace("_", " ")
+                  .toUpperCase()}
+              </strong>
+
+              <p>{notification.message}</p>
+
+              <small>
+                {new Date(notification.timestamp).toLocaleString()}
+              </small>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+</section>
 
         {loading && <p className="message">Loading your study data...</p>}
 

@@ -217,3 +217,141 @@ This project demonstrates:
 - Secure password handling and secret management.
 
 **Project Status:** WA-C2 implementation and local automated tests completed.
+
+## WA-8 Milestone: Real-Time WebSocket Notifications
+
+The Study Resource Organizer has been upgraded with real-time notifications using Django Channels and WebSockets.
+
+### Technologies Used
+
+- Django Channels
+- Daphne ASGI Server
+- WebSockets
+- JWT Authentication
+- React.js
+- JavaScript
+- CSS
+- InMemoryChannelLayer
+
+### Features Implemented
+
+- Real-time WebSocket connection between React frontend and Django backend.
+- JWT-based authentication for WebSocket connections.
+- Private notification groups for individual authenticated users.
+- Automatic notifications when a user creates a category.
+- Automatic notifications when a user adds a study resource.
+- Automatic notifications when a user creates a study note.
+- Live notification panel in the React dashboard.
+- Connection status indicator (Connected, Connecting, Disconnected).
+- Notification timestamps.
+- Clear All notification functionality.
+- Automatic WebSocket disconnection when the component unmounts or the user logs out.
+
+### WebSocket Endpoint
+
+```text
+ws://127.0.0.1:8000/ws/notifications/?token=YOUR_ACCESS_TOKEN
+```
+
+The WebSocket connection uses the user's JWT access token for authentication.
+
+### Notification Events
+
+| Event            | Description                       |
+| ---------------- | --------------------------------- |
+| category_created | A new study category was created. |
+| resource_created | A new study resource was added.   |
+| note_created     | A new study note was created.     |
+
+### Backend Configuration
+
+The project uses Django Channels with an InMemoryChannelLayer for local development.
+
+The ASGI application is configured in:
+
+```text
+backend/config/asgi.py
+```
+
+WebSocket authentication middleware:
+
+```text
+backend/config/jwt_middleware.py
+```
+
+WebSocket consumer:
+
+```text
+backend/resources/consumers.py
+```
+
+WebSocket routing:
+
+```text
+backend/resources/routing.py
+```
+
+Notification events are triggered from:
+
+```text
+backend/resources/views.py
+```
+
+### Run the WebSocket Backend
+
+Activate the backend virtual environment and navigate to the backend directory.
+
+Start the Daphne ASGI server:
+
+```bash
+python -m daphne -b 127.0.0.1 -p 8000 config.asgi:application
+```
+
+### Frontend Configuration
+
+Create or update the frontend `.env` file:
+
+```env
+VITE_API_URL=http://127.0.0.1:8000/api
+```
+
+Start the React application:
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173/
+```
+
+Log in to connect to your private notification channel.
+
+### Testing Real-Time Notifications
+
+The following tests were successfully performed locally:
+
+1. Created a category and verified its notification appeared automatically.
+2. Added a study resource and verified its notification appeared automatically.
+3. Created a study note and verified its notification appeared automatically.
+4. Opened two browser sessions using different user accounts.
+5. Created a category using the second account.
+6. Verified that the second account received the notification while the first account did not.
+
+### Notification Privacy
+
+Each authenticated user is assigned a separate notification group:
+
+```text
+study_notifications_USER_ID
+```
+
+This ensures that notifications are delivered to the corresponding user's WebSocket connection rather than being broadcast to all users.
+
+### Channel Layer Note
+
+The current InMemoryChannelLayer configuration is intended for local development and single-process testing. A Redis-based channel layer is recommended for multi-process production deployments.
+
+**WA-8 Status:** Real-time WebSocket notifications implemented and successfully tested locally.

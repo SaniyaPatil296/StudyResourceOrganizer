@@ -752,3 +752,140 @@ button {
     font-size: 22px;
   }
 }
+
+/* ==========================================
+   REAL-TIME NOTIFICATION PANEL
+========================================== */
+
+.notification-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 24px;
+  margin: 25px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.notification-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.notification-heading h2 {
+  color: #1e293b;
+  font-size: 21px;
+  margin: 0 0 6px;
+}
+
+.notification-heading p {
+  color: #64748b;
+  margin: 0;
+  font-size: 14px;
+}
+
+.connection-status {
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.connection-status.connected {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.connection-status.connecting {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.connection-status.disconnected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.notification-empty {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.notification-actions button {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 7px 13px;
+  border-radius: 7px;
+  font-size: 12px;
+}
+
+.notification-actions button:hover {
+  background: #fecaca;
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  background: #f8fafc;
+  border-left: 4px solid #2563eb;
+  border-radius: 9px;
+  padding: 14px;
+}
+
+.notification-icon {
+  font-size: 20px;
+}
+
+.notification-details strong {
+  display: block;
+  color: #1e40af;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.notification-details p {
+  color: #334155;
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.notification-details small {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .notification-panel {
+    padding: 16px;
+  }
+
+  .notification-heading {
+    align-items: flex-start;
+  }
+}
