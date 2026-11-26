@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Auth from "./Auth";
 import "./App.css";
 
-const API = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+const API = import.meta.env.VITE_API_URL || "/api";
 
 function App() {
   // Authentication state
@@ -666,68 +666,65 @@ function App() {
           <p>Manage your subjects and learning resources in one place.</p>
         </section>
         {/* Real-Time Notifications */}
-<section className="notification-panel">
-  <div className="notification-heading">
-    <div>
-      <h2>🔔 Live Notifications</h2>
-      <p>Stay updated with your latest study activities.</p>
-    </div>
-
-    <span className={`connection-status ${wsStatus}`}>
-      {wsStatus === "connected"
-        ? "● Connected"
-        : wsStatus === "connecting"
-          ? "● Connecting..."
-          : "● Disconnected"}
-    </span>
-  </div>
-
-  {notifications.length === 0 ? (
-    <p className="notification-empty">
-      No new notifications. Create a category, resource, or note to see
-      real-time updates here.
-    </p>
-  ) : (
-    <>
-      <div className="notification-actions">
-        <span>{notifications.length} notification(s)</span>
-
-        <button
-          type="button"
-          onClick={() => setNotifications([])}
-        >
-          Clear All
-        </button>
-      </div>
-
-      <div className="notification-list">
-        {notifications.map((notification, index) => (
-          <div
-            className="notification-item"
-            key={`${notification.timestamp}-${index}`}
-          >
-            <div className="notification-icon">🔔</div>
-
-            <div className="notification-details">
-              <strong>
-                {notification.event
-                  ?.replace("_created", "")
-                  .replace("_", " ")
-                  .toUpperCase()}
-              </strong>
-
-              <p>{notification.message}</p>
-
-              <small>
-                {new Date(notification.timestamp).toLocaleString()}
-              </small>
+        <section className="notification-panel">
+          <div className="notification-heading">
+            <div>
+              <h2>🔔 Live Notifications</h2>
+              <p>Stay updated with your latest study activities.</p>
             </div>
+
+            <span className={`connection-status ${wsStatus}`}>
+              {wsStatus === "connected"
+                ? "● Connected"
+                : wsStatus === "connecting"
+                  ? "● Connecting..."
+                  : "● Disconnected"}
+            </span>
           </div>
-        ))}
-      </div>
-    </>
-  )}
-</section>
+
+          {notifications.length === 0 ? (
+            <p className="notification-empty">
+              No new notifications. Create a category, resource, or note to see
+              real-time updates here.
+            </p>
+          ) : (
+            <>
+              <div className="notification-actions">
+                <span>{notifications.length} notification(s)</span>
+
+                <button type="button" onClick={() => setNotifications([])}>
+                  Clear All
+                </button>
+              </div>
+
+              <div className="notification-list">
+                {notifications.map((notification, index) => (
+                  <div
+                    className="notification-item"
+                    key={`${notification.timestamp}-${index}`}
+                  >
+                    <div className="notification-icon">🔔</div>
+
+                    <div className="notification-details">
+                      <strong>
+                        {notification.event
+                          ?.replace("_created", "")
+                          .replace("_", " ")
+                          .toUpperCase()}
+                      </strong>
+
+                      <p>{notification.message}</p>
+
+                      <small>
+                        {new Date(notification.timestamp).toLocaleString()}
+                      </small>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </section>
 
         {loading && <p className="message">Loading your study data...</p>}
 

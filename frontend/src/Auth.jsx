@@ -1,8 +1,6 @@
-
 import { useState } from "react";
 
-const API = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
-
+const API = import.meta.env.VITE_API_URL || "/api";
 function Auth({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
@@ -37,7 +35,7 @@ function Auth({ onLogin }) {
         throw new Error(
           data.error ||
             Object.values(data).flat().join(" ") ||
-            "Authentication failed."
+            "Authentication failed.",
         );
       }
 
@@ -108,18 +106,12 @@ function Auth({ onLogin }) {
           {error && <p className="error">{error}</p>}
 
           <button type="submit" disabled={loading}>
-            {loading
-              ? "Please wait..."
-              : isLogin
-                ? "Login"
-                : "Register"}
+            {loading ? "Please wait..." : isLogin ? "Login" : "Register"}
           </button>
         </form>
 
         <p className="auth-switch">
-          {isLogin
-            ? "Don't have an account?"
-            : "Already have an account?"}
+          {isLogin ? "Don't have an account?" : "Already have an account?"}
 
           <button
             type="button"

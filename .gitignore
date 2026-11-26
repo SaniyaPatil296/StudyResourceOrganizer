@@ -11,3 +11,6 @@ frontend/dist/
 # SQLite database files
 backend/*.sqlite3
 
+
+# Temporary database transfer file
+backend/nutan_transfer.json

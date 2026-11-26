@@ -355,3 +355,55 @@ This ensures that notifications are delivered to the corresponding user's WebSoc
 The current InMemoryChannelLayer configuration is intended for local development and single-process testing. A Redis-based channel layer is recommended for multi-process production deployments.
 
 **WA-8 Status:** Real-time WebSocket notifications implemented and successfully tested locally.
+
+## Docker Setup
+
+This project uses Docker Compose to run the React frontend, Django backend, PostgreSQL database, and Nginx reverse proxy.
+
+### Prerequisites
+
+- Docker Desktop installed and running.
+
+### Build Docker Images
+
+```bash
+docker compose build
+```
+
+### Start the Application
+
+```bash
+docker compose up
+```
+
+### Access the Application
+
+Open your browser:
+
+http://localhost
+
+### Check Running Containers
+
+```bash
+docker compose ps
+```
+
+### View Application Logs
+
+```bash
+docker compose logs -f
+```
+
+### Stop the Application
+
+```bash
+docker compose down
+```
+
+The PostgreSQL database uses a named Docker volume (`postgres_data`) to preserve data when containers are stopped.
+
+**Note:** To delete the database volume and its stored data, run:
+
+```bash
+docker compose down -v
+```
